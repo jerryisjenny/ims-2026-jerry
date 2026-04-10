@@ -19,7 +19,7 @@ function draw() {
   video.loadPixels();
   applyGlitchEffects();// Core logic: Render slices of the video with individual motion/color offsets
   if (random() < 0.02) distortColors();// Random Trigger: Horizontal color shifting and copying
-  if (random() < 0.01) pixelSortGlitch();// Random Trigger: Column-based sorting algorithm
+  if (random() < 0.01) pixelSortGlitch();// Random Trigger:· Column-based sorting algorithm
   interactFragments();
 }
 
