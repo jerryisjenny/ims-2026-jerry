@@ -2,9 +2,7 @@ let faceMesh;
 let faces = [];
 let video;
 let PIXEL_SIZE = 14;
-
-// temparily canvas for reading video pixels, to avoid calling loadPixels() on the main canvas
-let tmpCanvas, tmpCtx;
+let tmpGfx;
 
 function setup() {
   pixelDensity(1);
@@ -16,11 +14,7 @@ function setup() {
   video.size(320, 240);
   video.hide();
 
-  // create a temporary canvas for reading video pixels, to avoid calling loadPixels() on the main canvas
-  tmpCanvas        = document.createElement('canvas');
-  tmpCanvas.width  = 320;
-  tmpCanvas.height = 240;
-  tmpCtx           = tmpCanvas.getContext('2d');
+  tmpGfx = createGraphics(320, 240);
 
   ml5.setBackend('webgl');
   faceMesh = ml5.faceMesh(
@@ -40,7 +34,13 @@ function setup() {
 
 function draw() {
   background(0);
+
+  // 翻转画视频帧，和 faceMesh 坐标保持一致
+  push();
+  translate(width, 0);
+  scale(-1, 1);
   image(video, 0, 0, width, height);
+  pop();
 
   if (faces.length === 0) {
     fill(0, 0, 0, 160);
@@ -58,7 +58,7 @@ function draw() {
   let ft = kp[10].y  * scaleY;
   let fb = kp[152].y * scaleY;
 
-  
+  // 脸外压暗
   fill(0, 0, 0, 170);
   noStroke();
   rect(0,  0,  width,      ft);
@@ -66,9 +66,14 @@ function draw() {
   rect(0,  ft, fl,         fb - ft);
   rect(fr, ft, width - fr, fb - ft);
 
-  // read video pixels from the temporary canvas, to avoid calling loadPixels() on the main canvas
-  tmpCtx.drawImage(video.elt, 0, 0, 320, 240);
-  let pixels = tmpCtx.getImageData(0, 0, 320, 240).data;
+  // tmpGfx 也翻转，颜色采样才正确
+  tmpGfx.push();
+  tmpGfx.translate(320, 0);
+  tmpGfx.scale(-1, 1);
+  tmpGfx.image(video, 0, 0);
+  tmpGfx.pop();
+  tmpGfx.loadPixels();
+  let pixels = tmpGfx.pixels;
 
   noStroke();
   for (let px = fl; px < fr; px += PIXEL_SIZE) {
@@ -98,23 +103,17 @@ function on_capture() {
   let ft = kp[10].y  * scaleY;
   let fb = kp[152].y * scaleY;
 
-  // size of the exported image
   let OUTPUT_SIZE = 400;
+  let exportGfx   = createGraphics(OUTPUT_SIZE, OUTPUT_SIZE);
 
-  let exportCanvas    = document.createElement('canvas');
-  exportCanvas.width  = OUTPUT_SIZE;
-  exportCanvas.height = OUTPUT_SIZE;
-  let exportCtx       = exportCanvas.getContext('2d');
-
-  // draw the face region from the video onto the export canvas, and it will be resized to 400x400
-  exportCtx.drawImage(
-    document.querySelector('canvas'),
-    fl, ft, fr - fl, fb - ft,  
-    0,  0,  OUTPUT_SIZE, OUTPUT_SIZE  
+  exportGfx.image(
+    get(fl, ft, fr - fl, fb - ft),
+    0, 0, OUTPUT_SIZE, OUTPUT_SIZE
   );
 
-  let dataURL = exportCanvas.toDataURL('image/jpeg', 0.4);
+  let dataURL = exportGfx.elt.toDataURL('image/jpeg', 0.4);
   upload_frame(dataURL);
+  exportGfx.remove();
 }
 
 function windowResized() {
