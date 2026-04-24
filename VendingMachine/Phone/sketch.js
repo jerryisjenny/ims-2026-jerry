@@ -86,7 +86,34 @@ function on_capture() {
   let btn = document.getElementById('capture-btn');
   btn.style.background = 'rgba(255,255,255,0.7)';
   setTimeout(() => { btn.style.background = 'rgba(255,255,255,0.15)'; }, 300);
-  let dataURL = document.querySelector('canvas').toDataURL('image/jpeg', 0.4);
+
+  if (faces.length === 0) return;
+
+  let kp     = faces[0].keypoints;
+  let scaleX = width  / video.width;
+  let scaleY = height / video.height;
+
+  let fl = kp[234].x * scaleX;
+  let fr = kp[454].x * scaleX;
+  let ft = kp[10].y  * scaleY;
+  let fb = kp[152].y * scaleY;
+
+  // 固定输出尺寸
+  let OUTPUT_SIZE = 400;
+
+  let exportCanvas    = document.createElement('canvas');
+  exportCanvas.width  = OUTPUT_SIZE;
+  exportCanvas.height = OUTPUT_SIZE;
+  let exportCtx       = exportCanvas.getContext('2d');
+
+  // 把当前 canvas 里脸部那块裁出来，缩放到 400x400
+  exportCtx.drawImage(
+    document.querySelector('canvas'),
+    fl, ft, fr - fl, fb - ft,  // 源：脸部边界框
+    0,  0,  OUTPUT_SIZE, OUTPUT_SIZE  // 目标：400x400
+  );
+
+  let dataURL = exportCanvas.toDataURL('image/jpeg', 0.4);
   upload_frame(dataURL);
 }
 
