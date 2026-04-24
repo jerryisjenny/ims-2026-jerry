@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face Vending</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://unpkg.com/ml5@1.2.0/dist/ml5.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: #000; overflow: hidden; }
+      canvas { display: block; }
+
+      #capture-btn {
+        position: absolute;
+        bottom: 48px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        border: 4px solid rgba(255,255,255,0.9);
+        background: rgba(255,255,255,0.15);
+        cursor: pointer;
+        z-index: 10;
+        transition: background 0.15s;
+      }
+      #capture-btn:active { background: rgba(255,255,255,0.7); }
+
+      #status {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255,255,255,0.6);
+        font-family: sans-serif;
+        font-size: 14px;
+        z-index: 10;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status">正在启动...</div>
+    <button id="capture-btn"></button>
+
+    <script src="firebase.js"></script>
+    <script src="sketch.js"></script>
+  </body>
+</html>
