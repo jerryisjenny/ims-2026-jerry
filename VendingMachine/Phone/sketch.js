@@ -1,8 +1,10 @@
 let faceMesh;
 let faces = [];
 let video;
-let pg; // 复用的 graphics buffer
-let PIXEL_SIZE = 12;
+let PIXEL_SIZE = 14;
+
+// 复用的临时 canvas，避免每帧创建
+let tmpCanvas, tmpCtx;
 
 function setup() {
   pixelDensity(1);
@@ -14,8 +16,11 @@ function setup() {
   video.size(320, 240);
   video.hide();
 
-  // 复用 buffer，不在 draw 里反复创建
-  pg = createGraphics(320, 240);
+  // 一次性创建，draw 里复用
+  tmpCanvas        = document.createElement('canvas');
+  tmpCanvas.width  = 320;
+  tmpCanvas.height = 240;
+  tmpCtx           = tmpCanvas.getContext('2d');
 
   ml5.setBackend('webgl');
   faceMesh = ml5.faceMesh(
@@ -35,8 +40,6 @@ function setup() {
 
 function draw() {
   background(0);
-
-  // 整帧先画出来
   image(video, 0, 0, width, height);
 
   if (faces.length === 0) {
@@ -55,26 +58,25 @@ function draw() {
   let ft = kp[10].y  * scaleY;
   let fb = kp[152].y * scaleY;
 
-  // 脸外四块压暗
+  // 脸外压暗
   fill(0, 0, 0, 170);
   noStroke();
-  rect(0,  0,  width, ft);
-  rect(0,  fb, width, height - fb);
-  rect(0,  ft, fl,    fb - ft);
+  rect(0,  0,  width,      ft);
+  rect(0,  fb, width,      height - fb);
+  rect(0,  ft, fl,         fb - ft);
   rect(fr, ft, width - fr, fb - ft);
 
-  // 读像素（复用 pg）
-  pg.image(video, 0, 0);
-  pg.loadPixels();
+  // 读当前帧像素（复用 tmpCtx）
+  tmpCtx.drawImage(video.elt, 0, 0, 320, 240);
+  let pixels = tmpCtx.getImageData(0, 0, 320, 240).data;
 
   noStroke();
   for (let px = fl; px < fr; px += PIXEL_SIZE) {
     for (let py = ft; py < fb; py += PIXEL_SIZE) {
       let srcX = constrain(floor(px / scaleX), 0, 319);
       let srcY = constrain(floor(py / scaleY), 0, 239);
-
-      let idx = (srcY * 320 + srcX) * 4;
-      fill(pg.pixels[idx], pg.pixels[idx+1], pg.pixels[idx+2]);
+      let idx  = (srcY * 320 + srcX) * 4;
+      fill(pixels[idx], pixels[idx+1], pixels[idx+2]);
       rect(px, py, PIXEL_SIZE, PIXEL_SIZE);
     }
   }
