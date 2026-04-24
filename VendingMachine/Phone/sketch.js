@@ -3,7 +3,7 @@ let faces = [];
 let video;
 let PIXEL_SIZE = 14;
 
-// 复用的临时 canvas，避免每帧创建
+// temparily canvas for reading video pixels, to avoid calling loadPixels() on the main canvas
 let tmpCanvas, tmpCtx;
 
 function setup() {
@@ -16,7 +16,7 @@ function setup() {
   video.size(320, 240);
   video.hide();
 
-  // 一次性创建，draw 里复用
+  // create a temporary canvas for reading video pixels, to avoid calling loadPixels() on the main canvas
   tmpCanvas        = document.createElement('canvas');
   tmpCanvas.width  = 320;
   tmpCanvas.height = 240;
@@ -58,7 +58,7 @@ function draw() {
   let ft = kp[10].y  * scaleY;
   let fb = kp[152].y * scaleY;
 
-  // 脸外压暗
+  
   fill(0, 0, 0, 170);
   noStroke();
   rect(0,  0,  width,      ft);
@@ -66,7 +66,7 @@ function draw() {
   rect(0,  ft, fl,         fb - ft);
   rect(fr, ft, width - fr, fb - ft);
 
-  // 读当前帧像素（复用 tmpCtx）
+  // read video pixels from the temporary canvas, to avoid calling loadPixels() on the main canvas
   tmpCtx.drawImage(video.elt, 0, 0, 320, 240);
   let pixels = tmpCtx.getImageData(0, 0, 320, 240).data;
 
@@ -98,7 +98,7 @@ function on_capture() {
   let ft = kp[10].y  * scaleY;
   let fb = kp[152].y * scaleY;
 
-  // 固定输出尺寸
+  // size of the exported image
   let OUTPUT_SIZE = 400;
 
   let exportCanvas    = document.createElement('canvas');
@@ -106,11 +106,11 @@ function on_capture() {
   exportCanvas.height = OUTPUT_SIZE;
   let exportCtx       = exportCanvas.getContext('2d');
 
-  // 把当前 canvas 里脸部那块裁出来，缩放到 400x400
+  // draw the face region from the video onto the export canvas, and it will be resized to 400x400
   exportCtx.drawImage(
     document.querySelector('canvas'),
-    fl, ft, fr - fl, fb - ft,  // 源：脸部边界框
-    0,  0,  OUTPUT_SIZE, OUTPUT_SIZE  // 目标：400x400
+    fl, ft, fr - fl, fb - ft,  
+    0,  0,  OUTPUT_SIZE, OUTPUT_SIZE  
   );
 
   let dataURL = exportCanvas.toDataURL('image/jpeg', 0.4);
