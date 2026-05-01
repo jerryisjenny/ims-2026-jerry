@@ -1,0 +1,130 @@
+@media only screen and (max-width: 600px) {
+  body, button, select, input {
+    font-size: 5vw;
+  }
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+button, select, input {
+  margin: 5px;
+  padding: 5px;
+}
+canvas {
+  display: block;
+  position: fixed;
+  pointer-events: none;
+}
+.hidden {
+  display: none;
+}
+* {
+  font-family: monospace;
+}
+
+#id_loader {
+  display: none;
+}
+
+/* ── Screen mode: vending machine layout ── */
+
+#id_vending_container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100vh;
+}
+
+#id_vending_img {
+  height: 100vh;
+  display: block;
+}
+
+/* Face slots overlaid on the vending machine image.
+   Positions are % of the container (= image) dimensions.
+   ADJUST left/top/width to match your vending.jpg. */
+.vending-slot {
+  position: absolute;
+  overflow: hidden;
+  background-color: #111;
+  background-size: cover;
+  background-position: center;
+}
+
+/* ── Phone mode: filter buttons ── */
+
+#id_filter_row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: rgba(0,0,0,0.7);
+  flex-wrap: wrap;
+}
+
+#id_filter_row label {
+  color: #fff;
+  font-size: 0.9em;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border: 2px solid #555;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85em;
+  background: #222;
+  color: #fff;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.filter-btn.active {
+  border-color: #ffcc00;
+  background: #444;
+}
+
+#id_gallery img {
+  border-radius: 4px;
+  margin: 2px;
+}
+
+/* ── Tap-to-start overlay (phone mode only) ── */
+
+#id_rec_prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12vw;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#id_tap_overlay {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+}
+
+#id_tap_overlay.hidden {
+  display: none;
+}
+
+#id_tap_btn {
+  font-size: 1.4em;
+  padding: 18px 40px;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
