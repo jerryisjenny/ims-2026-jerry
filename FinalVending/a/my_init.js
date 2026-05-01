@@ -1,6 +1,6 @@
 //
 function my_init() {
-  my.version = '?v=71';
+  my.version = '?v=72';
   my.appTitle = 'Vending';
   my.isRemote = 1;
   my.logLoud = 1;
@@ -77,7 +77,7 @@ function my_init() {
   }
 
   my.qrcode_url = () => `qrcode/${my.mo_group}.png`;
-  my.showQRCode = () => true;
+  my.showQRCode = () => false;
 
   if (my.showRemove) {
     my.photo_max = Number.MAX_SAFE_INTEGER;
