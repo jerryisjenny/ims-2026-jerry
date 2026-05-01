@@ -26,10 +26,10 @@ function create_screen_ui() {
   // Four face slots positioned over the machine compartments.
   // Adjust left/top/width (as % of the image dimensions) to align with vending.jpg.
   const slotPositions = [
-    { left: '22%', top: '22%', width: '22%' }, // slot 0 — top left
-    { left: '29%', top: '22%', width: '22%' }, // slot 1 — top right
-    { left: '22%', top: '37%', width: '22%' }, // slot 2 — bottom left
-    { left: '29%', top: '37%', width: '22%' }, // slot 3 — bottom right
+    { left: '21%', top: '22%', width: '22%' }, // slot 0 — top left
+    { left: '43%', top: '22%', width: '22%' }, // slot 1 — top right
+    { left: '21%', top: '41%', width: '22%' }, // slot 2 — bottom left
+    { left: '43%', top: '41%', width: '22%' }, // slot 3 — bottom right
   ];
 
   for (let i = 0; i < my.SLOT_COUNT; i++) {
