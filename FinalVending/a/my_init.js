@@ -1,13 +1,13 @@
 // Global configuration — called once at the start of setup().
 // All runtime state is stored on the `my` object to avoid global variable clutter.
 function my_init() {
-  my.version = '?v=73';
+  my.version = '?v=74';
   my.appTitle = 'Vending';
   my.isRemote = 1;
   my.logLoud = 1;
 
   my.add_action_delay = 0.5; // seconds the mouth must stay open before capture triggers
-  my.lipsDiff = 0;           // updated each frame by the faceMesh renderer
+  my.lipsDiff = 0; // updated each frame by the faceMesh renderer
 
   // Firebase project credentials
   my.fireb_config = {
@@ -25,8 +25,8 @@ function my_init() {
   my.frame_count = 10; // number of JPEG frames captured per mouth-open event
 
   // Slot / photo settings
-  my.SLOT_COUNT = 4;    // number of face slots on the big screen
-  my.photo_max = 4;     // max photos shown in the phone gallery
+  my.SLOT_COUNT = 4; // number of face slots on the big screen
+  my.photo_max = 4; // max photos shown in the phone gallery
   my.photo_index = 0;
   my.photo_list = [];
 
@@ -34,10 +34,10 @@ function my_init() {
 
   // Camera capture resolution — kept low so mobile GPUs don't stall
   let scale = 0.5;
-  my.vwidth = 480 * scale;  // 240 px
+  my.vwidth = 480 * scale; // 240 px
   my.vheight = 640 * scale; // 320 px
-  my.top_percent = 75;      // canvas height as % of window height
-  my.long = 0;              // set to 1 via ?long=1 to swap width/height (landscape mode)
+  my.top_percent = 75; // canvas height as % of window height
+  my.long = 0; // set to 1 via ?long=1 to swap width/height (landscape mode)
 
   my.imageQuality = 0.5; // JPEG quality for captured frames (0–1)
   my.imageExt = '.jpg';
@@ -58,12 +58,12 @@ function my_init() {
     if (my.query.group) {
       my.mo_group = my.query.group;
     }
-    my.isRemote    = parseFloat(my.query.remote      || my.isRemote);
-    my.photo_max   = parseFloat(my.query.photo_max   || my.photo_max);
+    my.isRemote = parseFloat(my.query.remote || my.isRemote);
+    my.photo_max = parseFloat(my.query.photo_max || my.photo_max);
     my.top_percent = parseFloat(my.query.top_percent || my.top_percent);
-    my.long        = parseFloat(my.query.long        || my.long);
+    my.long = parseFloat(my.query.long || my.long);
     my.showButtons = parseFloat(my.query.show_buttons || my.showButtons);
-    my.showRemove  = parseFloat(my.query.show_remove  || my.showRemove);
+    my.showRemove = parseFloat(my.query.show_remove || my.showRemove);
     // ?screen=1 activates big-screen display mode (no camera, Firebase listener only)
     my.isScreen = parseFloat(my.query.screen || 0);
   }
