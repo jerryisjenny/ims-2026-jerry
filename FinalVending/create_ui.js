@@ -42,6 +42,12 @@ function create_screen_ui() {
     slot.style(`left:${pos.left}; top:${pos.top}; width:${pos.width}; aspect-ratio:1;`);
     container.child(slot);
   }
+
+  if (my.showQRCode()) {
+    let qr = createImg('qrvending.png', 'scan to play');
+    qr.style('position:absolute; bottom:2%; right:2%; width:12%; opacity:0.9;');
+    container.child(qr);
+  }
 }
 
 // ── Phone mode: filter buttons + camera + thumbnail gallery ───────────────────
