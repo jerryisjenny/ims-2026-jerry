@@ -44,9 +44,10 @@ function create_screen_ui() {
   }
 
   if (my.showQRCode()) {
-    let qr = createImg('qrvending.png', 'scan to play');
-    qr.style('position:absolute; bottom:2%; right:2%; width:12%; opacity:0.9;');
-    container.child(qr);
+    let qr = document.createElement('img');
+    qr.src = 'qrvending.png';
+    qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:12vmin; z-index:10;';
+    document.body.appendChild(qr);
   }
 }
 
