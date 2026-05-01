@@ -46,6 +46,20 @@ function create_screen_ui() {
   qr.src = 'qrvending.png';
   qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:150px; z-index:9000;';
   document.body.appendChild(qr);
+
+  // Click anywhere to enter / exit fullscreen
+  let fsHint = createDiv('Click to fullscreen');
+  fsHint.id('id_fs_hint');
+  fsHint.style('position:fixed; top:1%; left:50%; transform:translateX(-50%);' +
+    'color:rgba(255,255,255,0.6); font-size:14px; pointer-events:none; z-index:9001;');
+  document.body.appendChild(fsHint.elt);
+
+  container.style('cursor:pointer;');
+  container.mousePressed(() => {
+    let fs = fullscreen();
+    fullscreen(!fs);
+    fsHint.style('display:' + (fs ? 'block' : 'none'));
+  });
 }
 
 // ── Phone mode: filter buttons + camera canvas + thumbnail gallery ─────────────
