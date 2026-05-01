@@ -43,13 +43,10 @@ function create_screen_ui() {
     container.child(slot);
   }
 
-  if (my.showQRCode()) {
-    let qr = document.createElement('img');
-    qr.src = 'qrvending.png';
-    qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:150px; z-index:9000; background:red; min-width:150px; min-height:150px;';
-    qr.onerror = () => { qr.style.background = 'red'; qr.alt = 'NOT FOUND'; };
-    document.body.appendChild(qr);
-  }
+  let qr = document.createElement('img');
+  qr.src = 'qrvending.png';
+  qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:150px; z-index:9000;';
+  document.body.appendChild(qr);
 }
 
 // ── Phone mode: filter buttons + camera + thumbnail gallery ───────────────────

@@ -1,6 +1,6 @@
 //
 function my_init() {
-  my.version = '?v=72';
+  my.version = '?v=73';
   my.appTitle = 'Vending';
   my.isRemote = 1;
   my.logLoud = 1;
