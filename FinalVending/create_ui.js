@@ -56,9 +56,13 @@ function create_screen_ui() {
 
   container.style('cursor:pointer;');
   container.mousePressed(() => {
-    let fs = fullscreen();
-    fullscreen(!fs);
-    fsHint.style('display:' + (fs ? 'block' : 'none'));
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      fsHint.elt.style.display = 'none';
+    } else {
+      document.exitFullscreen();
+      fsHint.elt.style.display = 'block';
+    }
   });
 }
 

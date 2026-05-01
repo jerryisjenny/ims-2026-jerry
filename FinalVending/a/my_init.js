@@ -103,9 +103,9 @@ window.addEventListener('resize', window_resized);
 // Recalculates thumbnail width whenever the window is resized.
 function window_resized() {
   let perRow = 4.4;
-  my.thumbWidth = Math.floor(windowWidth) / perRow;
+  my.thumbWidth = Math.floor(window.innerWidth) / perRow;
   if (my.thumbWidth < 120) {
     perRow = 4.5;
-    my.thumbWidth = Math.floor(windowWidth) / perRow;
+    my.thumbWidth = Math.floor(window.innerWidth) / perRow;
   }
 }
