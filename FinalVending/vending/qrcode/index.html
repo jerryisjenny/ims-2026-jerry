@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vending Face</title>
+    <style>
+      body { font-family: monospace; padding: 20px; background: #111; color: #eee; }
+      h1 { font-size: 1.4em; }
+      h2 { font-size: 1.1em; }
+      a  { color: #ffcc00; font-size: 1.8em; }
+      p  { font-size: 1em; line-height: 1.6; color: #bbb; }
+    </style>
+  </head>
+  <body>
+    <h1 id="id_title">Vending Face</h1>
+    <h2>
+      <a href="../index.html?" id="id_link" target="moVending">
+        Enter &rarr;
+      </a>
+    </h2>
+    <p>
+      Open your camera, choose a colour filter, then open your mouth wide to add your face to the vending machine.
+    </p>
+
+    <script>
+      let str = window.location.search;
+      if (str) {
+        str = '&' + str.substring(1);
+      } else {
+        str = '';
+      }
+      id_title.innerHTML += ' ' + str;
+      id_link.href += str;
+    </script>
+  </body>
+</html>
