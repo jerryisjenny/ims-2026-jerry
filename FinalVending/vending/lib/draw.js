@@ -14,7 +14,7 @@ function draw_shape_layer(face, layer) {
   draw_vertex_layer(left_eye_bot, face, layer);
   layer.endShape();
 
-  my.output.beginShape();
+  layer.beginShape();
   draw_vertex_layer(right_eye_top, face, layer);
   draw_vertex_layer(right_eye_bot, face, layer);
   layer.endShape();

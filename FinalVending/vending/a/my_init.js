@@ -1,6 +1,6 @@
 //
 function my_init() {
-  my.version = '?v=61';
+  my.version = '?v=68';
   my.appTitle = 'Vending';
   my.isRemote = 1;
   my.logLoud = 1;
@@ -8,10 +8,19 @@ function my_init() {
   my.add_action_delay = 0.5;
   my.lipsDiff = 0;
 
-  my.fireb_config = 'jht9629';
-  my.dbase_rootPath = 'm0-@r-@w-';
+  my.fireb_config = {
+    apiKey: 'AIzaSyDI6K5JejPFGTOWiQwujaUsqyCt8ofLhn0',
+    authDomain: 'vendingmachine-bc1d3.firebaseapp.com',
+    databaseURL: 'https://vendingmachine-bc1d3-default-rtdb.firebaseio.com',
+    projectId: 'vendingmachine-bc1d3',
+    storageBucket: 'vendingmachine-bc1d3.firebasestorage.app',
+    messagingSenderId: '87289135886',
+    appId: '1:87289135886:web:3691786de504bdab494d5f',
+  };
+  my.dbase_rootPath = 'vending';
   my.mo_app = 'mo-vending';
   my.nameDevice = 'vending';
+  my.frame_count = 10;
 
   // Slot / photo settings
   my.SLOT_COUNT = 4;

@@ -4,16 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vending ?v=61</title>
+    <title>vending ?v=68</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
     <script src="https://unpkg.com/ml5@1.2.0/dist/ml5.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css?v=61" />
+    <link rel="stylesheet" type="text/css" href="style.css?v=68" />
   </head>
   <body>
     <div id="id_loader"></div>
     <main id="id_main"></main>
+    <div id="id_tap_overlay">
+      <button id="id_tap_btn">Tap to Start</button>
+    </div>
+    <div id="id_rec_prompt" style="display:none">🎤 Make Sound!</div>
+    <div id="id_dbg" style="position:fixed;bottom:0;left:0;right:0;max-height:30vh;overflow-y:auto;background:rgba(0,0,0,0.75);color:#0f0;font-size:11px;padding:4px;z-index:9999;pointer-events:none;"></div>
 
-    <script src="https://unpkg.com/itp-molib@0.1.28/dist/moLib.umd.js?v=61"></script>
+    <script src="https://unpkg.com/itp-molib@0.1.28/dist/moLib.umd.js?v=68"></script>
 
     <script>
       let loaderCount = 0;
@@ -25,26 +30,32 @@
         loaderCount--;
         if (loaderCount == 0) id_loader.style.display = 'none';
       }
+      function dbg(msg) {
+        let d = document.getElementById('id_dbg');
+        if (d) d.innerHTML = msg + '<br>' + d.innerHTML;
+        console.log('[dbg]', msg);
+      }
+      window.onerror = (msg, src, line) => dbg('ERR ' + msg + ' L' + line);
+      window.addEventListener('unhandledrejection', e => dbg('REJ ' + e.reason));
     </script>
 
-    <script src="a/a_sketch.js?v=61"></script>
-    <script src="a/my_init.js?v=61"></script>
-    <script src="a/setup_dbase.js?v=61"></script>
-    <script src="../alib/mediaDevices.js"></script>
-    <script src="../alib/PeriodTimer.js"></script>
-    <script src="create_ui.js?v=61"></script>
-    <script src="lib/bars.js?v=61"></script>
-    <script src="lib/bestill.js?v=61"></script>
-    <script src="lib/draw.js?v=61"></script>
-    <script src="lib/filters.js?v=61"></script>
-    <script src="lib/image.js?v=61"></script>
-    <script src="lib/photo.js?v=61"></script>
-    <script src="lib/video_init.js?v=61"></script>
-    <script src="mesh/EYES_MESH.js?v=61"></script>
-    <script src="mesh/FACE_MESH_PAIRS.js?v=61"></script>
-    <script src="mesh/LIPS_MESH.js?v=61"></script>
-    <script src="mesh/mesh_nits.js?v=61"></script>
-    <script src="mesh/faceMesh.js?v=61"></script>
-    <script src="mesh/faceMesh_render.js?v=61"></script>
+    <script src="a/a_sketch.js?v=68"></script>
+    <script src="a/my_init.js?v=68"></script>
+    <script src="a/setup_dbase.js?v=68"></script>
+    <script src="alib/mediaDevices.js"></script>
+    <script src="create_ui.js?v=68"></script>
+    <script src="lib/bars.js?v=68"></script>
+    <script src="lib/bestill.js?v=68"></script>
+    <script src="lib/draw.js?v=68"></script>
+    <script src="lib/filters.js?v=68"></script>
+    <script src="lib/image.js?v=68"></script>
+    <script src="lib/photo.js?v=68"></script>
+    <script src="lib/video_init.js?v=68"></script>
+    <script src="mesh/EYES_MESH.js?v=68"></script>
+    <script src="mesh/FACE_MESH_PAIRS.js?v=68"></script>
+    <script src="mesh/LIPS_MESH.js?v=68"></script>
+    <script src="mesh/mesh_nits.js?v=68"></script>
+    <script src="mesh/faceMesh.js?v=68"></script>
+    <script src="mesh/faceMesh_render.js?v=68"></script>
   </body>
 </html>

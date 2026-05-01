@@ -57,13 +57,16 @@ function faceMesh_render(my, keypoints) {
 
   // layer.strokeWeight(0);
   layer.noStroke();
+  input.loadPixels();
   let n = mesh_nits.length;
   for (let j = 0; j < n; j += 3) {
     let { x: x1, y: y1 } = keypoints[mesh_nits[j]];
     let { x: x2, y: y2 } = keypoints[mesh_nits[j + 1]];
     let { x: x3, y: y3 } = keypoints[mesh_nits[j + 2]];
-    let col = input.get(x1, y1);
-    col[3] = my.alpha;
+    let px = Math.round(Math.min(Math.max(x1, 0), input.width - 1));
+    let py = Math.round(Math.min(Math.max(y1, 0), input.height - 1));
+    let ii = (py * input.width + px) * 4;
+    let col = [input.pixels[ii], input.pixels[ii + 1], input.pixels[ii + 2], my.alpha];
     col_sum[0] += col[0];
     col_sum[1] += col[1];
     col_sum[2] += col[2];

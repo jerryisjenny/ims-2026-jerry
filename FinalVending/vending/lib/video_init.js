@@ -36,14 +36,14 @@ async function video_init_capture() {
   video_init_mask();
 }
 
-function video_init_mask() {
-  let { width, height } = my.video;
-  my.videoMask = createGraphics(width, height);
-  my.videoBuff = createGraphics(width, height);
+function video_init_mask(w, h) {
+  my.videoMask = createGraphics(w, h);
+  my.videoBuff = createGraphics(w, h);
 }
 
 function overlayEyesMouth() {
-  overlayEyesMouthFace(my.face1, my.video);
+  if (!my.face1) return;
+  overlayEyesMouthFace(my.face1, my.video.get());
 }
 
 function overlayEyesMouthBars() {

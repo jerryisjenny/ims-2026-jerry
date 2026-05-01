@@ -48,12 +48,10 @@ canvas {
    ADJUST left/top/width to match your vending.jpg. */
 .vending-slot {
   position: absolute;
-  border-radius: 50%;
   overflow: hidden;
   background-color: #111;
   background-size: cover;
   background-position: center;
-  box-shadow: inset 0 0 8px rgba(0,0,0,0.8);
 }
 
 /* ── Phone mode: filter buttons ── */
@@ -91,4 +89,42 @@ canvas {
 #id_gallery img {
   border-radius: 4px;
   margin: 2px;
+}
+
+/* ── Tap-to-start overlay (phone mode only) ── */
+
+#id_rec_prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 998;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12vw;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+#id_tap_overlay {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #000;
+  align-items: center;
+  justify-content: center;
+}
+
+#id_tap_overlay.hidden {
+  display: none;
+}
+
+#id_tap_btn {
+  font-size: 1.4em;
+  padding: 18px 40px;
+  border: 2px solid #fff;
+  border-radius: 40px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
 }

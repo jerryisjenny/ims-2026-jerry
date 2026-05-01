@@ -14,29 +14,55 @@ function setup() {
   my.canvas = createCanvas(windowWidth, nh);
 
   if (my.isScreen) {
-    // Screen: lower frame rate, canvas not needed for display
     frameRate(5);
+    id_tap_btn.textContent = 'Start Display';
+    id_tap_btn.addEventListener('click', () => {
+      id_tap_overlay.classList.add('hidden');
+      my.audioUnlocked = true;
+      for (let i = 0; i < my.SLOT_COUNT; i++) {
+        let slotEl = document.getElementById('slot_' + i);
+        if (slotEl && slotEl._audioUrl) slot_play_audio(slotEl);
+      }
+    });
   } else {
-    video_setup();
+    id_tap_btn.addEventListener('click', async () => {
+      id_tap_overlay.classList.add('hidden');
+      try {
+        my.audioStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        dbg('mic ready');
+      } catch (e) {
+        dbg('no mic: ' + e.message);
+        my.audioStream = null;
+      }
+      video_setup();
+      add_action_block(5);
+    });
   }
 
   create_ui();
   setup_dbase();
-
-  if (!my.isScreen) {
-    add_action_block(5); // delay first auto-capture on startup
-  }
 }
 
-function video_setup() {
-  my.video = createCapture(VIDEO, () => {
-    video_init_mask();
-    my.bars = new eff_bars({ width: my.video.width, height: my.video.height });
+async function video_setup() {
+  await mediaDevices_preflight();
+
+  my.video = createCapture({
+    video: {
+      facingMode: 'user',
+      width: { ideal: my.vwidth },
+      height: { ideal: my.vheight },
+    },
+    audio: false,
+  }, () => {
+    my.video.elt.muted = true;
+    let vw = my.video.width || my.vwidth;
+    let vh = my.video.height || my.vheight;
+    dbg('video ' + vw + 'x' + vh);
+    video_init_mask(vw, vh);
+    my.bars = new eff_bars({ width: vw, height: vh });
     my.input = my.video;
-    ml5.setBackend('webgl');
     faceMesh_init();
     my.bestill = new eff_bestill({ factor: 10, input: my.output });
-    console.log('video_setup done');
   });
   my.video.hide();
   my.video.size(my.vwidth, my.vheight);
@@ -58,20 +84,21 @@ function draw() {
   my.lipsDiff = 0;
 
   if (!my.faces) {
-    if (my.video) image(my.video, 0, 0);
     return;
   }
 
   if (my.faces.length > 0) {
     first_mesh_check();
-  }
-
-  check_show_hide();
-
-  if (my.show_mesh) {
-    draw_mesh();
+    check_show_hide();
+    if (my.show_mesh) {
+      draw_mesh();
+    }
   } else {
-    image(my.video, 0, 0);
+    if (!my.hiden_time) my.hiden_time = Date.now() / 1000;
+    if (Date.now() / 1000 - my.hiden_time > 0.5) {
+      my.face_hidden = 1;
+    }
+    // no face: keep last frame
   }
 }
 
@@ -169,3 +196,59 @@ function add_action_block(delay) {
 function add_action_unblock() {
   my.add_action_timeoutid = 0;
 }
+
+function capture_frames_promise(count, interval_ms) {
+  return new Promise(resolve => {
+    let frames = [];
+    let timer = setInterval(() => {
+      my.canvas.elt.toBlob(blob => {
+        frames.push(blob);
+        if (frames.length >= count) {
+          clearInterval(timer);
+          resolve(frames);
+        }
+      }, 'image/jpeg', my.imageQuality);
+    }, interval_ms);
+  });
+}
+
+function show_recording_prompt() {
+  let el = document.getElementById('id_rec_prompt');
+  el.style.display = 'flex';
+  setTimeout(() => { el.style.display = 'none'; }, 3200);
+}
+
+function audio_record(duration_ms) {
+  if (!my.audioStream) { dbg('audio_record: no stream'); return Promise.resolve(null); }
+  let tracks = my.audioStream.getAudioTracks();
+  dbg('audio_record tracks:' + tracks.length + ' state:' + (tracks[0]?.readyState || 'n/a'));
+  return new Promise(resolve => {
+    let mimeType = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
+      .find(t => { try { return MediaRecorder.isTypeSupported(t); } catch(e) { return false; } }) || '';
+    dbg('audio mime:' + (mimeType || 'default'));
+    try {
+      let rec = new MediaRecorder(my.audioStream, mimeType ? { mimeType } : {});
+      let chunks = [];
+      rec.ondataavailable = e => e.data.size > 0 && chunks.push(e.data);
+      rec.onstop = () => {
+        let blob = new Blob(chunks, { type: rec.mimeType || mimeType || 'audio/webm' });
+        dbg('audio blob:' + blob.size + 'B chunks:' + chunks.length);
+        resolve(blob);
+      };
+      rec.start();
+      setTimeout(() => rec.stop(), duration_ms);
+    } catch(e) {
+      dbg('rec err: ' + e.message);
+      resolve(null);
+    }
+  });
+}
+
+window.addEventListener('pagehide', () => {
+  if (my.video?.elt?.srcObject) {
+    my.video.elt.srcObject.getTracks().forEach(t => t.stop());
+  }
+  if (my.audioStream) {
+    my.audioStream.getTracks().forEach(t => t.stop());
+  }
+});
