@@ -46,7 +46,8 @@ function create_screen_ui() {
   if (my.showQRCode()) {
     let qr = document.createElement('img');
     qr.src = 'qrvending.png';
-    qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:12vmin; z-index:10;';
+    qr.style.cssText = 'position:fixed; bottom:2%; right:2%; width:150px; z-index:9000; background:red; min-width:150px; min-height:150px;';
+    qr.onerror = () => { qr.style.background = 'red'; qr.alt = 'NOT FOUND'; };
     document.body.appendChild(qr);
   }
 }
